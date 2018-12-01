@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Озвучить показания ИПУ</title>
+  <style>
+    form {
+      position: absolute;
+      width: 100%;
+      max-width: 460px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 0 20px;
+      box-sizing: border-box;
+    }
+    label {
+      display: block;
+      margin-bottom: 20px;
+    }
+    span {
+      font-size: 14px;
+    }
+    input {
+      display: block;
+      height: 38px;
+      width: 100%;
+      font-size: 18px;
+      box-sizing: border-box;
+    }
+    button {
+      height: 40px;
+      width: 100%;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <form onsubmit='textToSpeak(event)'>
+    <label>
+        <span>Улица:</span>
+        <input class="js-input" type="text" id="street">
+    </label>
+    <label>
+        <span>Дом:</span>
+        <input class="js-input" type="text" id="house">
+    </label>
+    <label>
+        <span>Квартира:</span>
+        <input class="js-input" type="text" id="flat">
+    </label>
+    <label>
+        <span>Фамилия:</span>
+        <input class="js-input" type="text" id="surname">
+    </label>
+    <label>
+        <span>Холодная вода:</span>
+        <input class="js-input" type="text" id="cold">
+    </label>
+    <label>
+        <span>Горячая вода:</span>
+        <input class="js-input" type="text" id="hot">
+    </label>
+    <button type='submit'>Озвучить</button>
+  </form>
+  <script src='./responsivevoice.js'></script>
+  <script>
+    const hash = window.location.hash;
+    const values = convertUrlParamsToValues(hash)
+    responsiveVoice.setDefaultVoice(values.voice || 'Russian Female');
+
+    Object.keys(values).forEach((key) => {
+      const element = document.getElementById(key)
+      if (element) element.value = values[key]
+    })
+
+    function convertUrlParamsToValues(urlParams) {
+      if (!urlParams) return {}
+      return decodeURI(urlParams)
+        .replace('#', '')
+        .split('&')
+        .reduce((acc, param) => {
+          const tmp = param.split('=')
+          acc[tmp[0]] = tmp[1]
+          return acc
+        }, {})
+    }
+
+    function convertValuesToUrlParams() {
+      let urlParams = ''
+      document.querySelectorAll('.js-input')
+        .forEach((element) => {
+          urlParams += `${element.id}=${element.value}&`;
+        })
+      return urlParams.slice(0, -1)
+    }
+
+    function textToSpeak(event) {
+      event.preventDefault();
+      window.location.hash = convertValuesToUrlParams()
+      responsiveVoice.speak(`
+        Показания воды.
+        Улица ${document.getElementById('street').value}, дом ${document.getElementById('house').value}, квартира ${document.getElementById('flat').value}.
+        Фамилия: ${document.getElementById('surname').value}.
+        Холодная вода: ${document.getElementById('cold').value}, Горячая вода: ${document.getElementById('hot').value},
+      `);
+    }
+  </script>
+</body>
+</html>
