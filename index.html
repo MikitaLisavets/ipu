@@ -99,10 +99,12 @@
     function textToSpeak(event) {
       event.preventDefault();
       window.location.hash = convertValuesToUrlParams()
-      const message = `
-        Улица ${document.getElementById('street').value}, дом ${document.getElementById('house').value}, квартира ${document.getElementById('flat').value}.
+      const message = `Улица ${document.getElementById('street').value}
+        дом ${document.getElementById('house').value},
+        квартира ${document.getElementById('flat').value}.
         Фамилия: ${document.getElementById('surname').value}.
-        Холодная вода: ${document.getElementById('cold').value}, Горячая вода: ${document.getElementById('hot').value}
+        Холодная вода: ${document.getElementById('cold').value},
+        Горячая вода: ${document.getElementById('hot').value}
       `;
       responsiveVoice.speak(message);
     }
