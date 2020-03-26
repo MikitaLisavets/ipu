@@ -64,11 +64,11 @@
     </label>
     <button type='submit'>Озвучить</button>
   </form>
-  <script src="https://code.responsivevoice.org/responsivevoice.js?key=aADzkjL4"></script>
+  <script src="./responsivevoice.js"></script>
   <script>
     const hash = window.location.hash;
     const values = convertUrlParamsToValues(hash)
-    responsiveVoice.setDefaultVoice(values.voice || 'Russian Female');
+    responsiveVoice.setDefaultVoice(values.voice || 'Russian Male');
 
     Object.keys(values).forEach((key) => {
       const element = document.getElementById(key)
@@ -99,11 +99,14 @@
     function textToSpeak(event) {
       event.preventDefault();
       window.location.hash = convertValuesToUrlParams()
-      responsiveVoice.speak(`
-        Улица ${document.getElementById('street').value}, дом ${document.getElementById('house').value}, квартира ${document.getElementById('flat').value}.
+      const message = `Улица ${document.getElementById('street').value}
+        дом ${document.getElementById('house').value},
+        квартира ${document.getElementById('flat').value}.
         Фамилия: ${document.getElementById('surname').value}.
-        Холодная вода: ${document.getElementById('cold').value}, Горячая вода: ${document.getElementById('hot').value},
-      `);
+        Холодная вода: ${document.getElementById('cold').value},
+        Горячая вода: ${document.getElementById('hot').value}
+      `;
+      responsiveVoice.speak(message);
     }
   </script>
 </body>
